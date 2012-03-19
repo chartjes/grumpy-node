@@ -26,24 +26,41 @@ function TransactionModel(pgClient) {
         this.client.query(q, function (err, result) {
             if (err) {
                 console.log(err);
-                callback({'success': 'false', 'msg': err});
+                //callback convention is error first
+                callback(err, {'success': 'false', 'msg': err});
                 return;
             }
 
             var idx = 0;
 
-            while (idx < result.rows.length) {
-                transaction = {
-                    'id': result.rows[idx].trans_id,
-                    'tradePartner1': result.rows[idx].ibl_team,
-                    'tradePartner2': result.rows[idx + 1].ibl_team,
-                    'description': result.rows[idx].ibl_team + ' ' + result.rows[idx].log_entry,
-                    'date': result.rows[idx].transaction_date 
-                };
-                transactions.push(transaction);
-                idx = idx  + 2;
-            }
-            callback(transactions);
+            //run this function for every row, return results for even rows
+            var transactions = result.rows.map(function(row, idx, rows) {
+                if(idx % 2 == 0) {
+                    //only map even trasactions back
+                    return {
+                        'id': row.trans_id,
+                        'tradePartner1': row.ibl_team,
+                        'tradePartner2': rows[idx + 1].ibl_team,
+                        'description': row.ibl_team + ' ' + row.log_entry,
+                        'date': row.transaction_date 
+                    };
+                }
+            });
+
+            //now we have a transaction for every even row of results, with every odd being undefined
+            //lets omit the undefined rows
+            transactions = transactions.reduce(function(prev, cur, idx, transactions) {
+                if(idx % 2 == 0) {
+                    //if this is an even row, append the row to the reduced transactions
+                    return prev.concat([cur]);
+                } else {
+                    //if this is an odd row, omit the result from the transactions
+                    return prev;
+                }
+            }, []);
+
+            //error first
+            callback(false, transactions);
         });
     };
 }

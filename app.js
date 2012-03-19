@@ -28,16 +28,25 @@ app.configure(function() {
 });
 
 app.get('/transactions/archived', function(req, res) {
-    var done = function (transactions) {
-        res.send(transactions);
+    var done = function (err, transactions) {
+        if(err) {
+            res.send("Error querying transactions", 500);
+        } else {
+            res.send(transactions);
+        }
+
     };
 
     var currentTransactions = tm.getArchived(done);
 });
 
 app.get('/transactions/current', function(req, res) {
-    var done = function (transactions) {
-        res.send(transactions);
+    var done = function (err, transactions) {
+        if(err) {
+            res.send("Error querying transactions", 500);
+        } else {
+            res.send(transactions);
+        }
     };
 
     var currentTransactions = tm.getCurrent(done);

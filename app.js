@@ -4,7 +4,7 @@ var application_root = __dirname;
 var express = require("express");
 var path = require("path");
 var pg = require('pg');
-var app = express.createServer();
+var app = express();
 var model = require('./transactionmodel');
 
 // Create our database connection

@@ -7,7 +7,7 @@ function TransactionModel(pgClient) {
         var endDate = "(SELECT MAX(transaction_date) FROM transaction_log)-'6 months'::interval";
         this.createTransactions(startDate, endDate, callback);
     };
-    
+
     this.getCurrent = function(callback) {
         var startDate = "(SELECT MAX(transaction_date) FROM transaction_log)-'3 weeks'::interval";
         var endDate = "(SELECT MAX(transaction_date) FROM transaction_log)";

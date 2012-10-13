@@ -45,7 +45,7 @@ app.get('/transactions/current', function(req, res) {
     if(err) {
       res.send("Error querying transactions", 500);
     } else {
-      console.log('sending transactions');
+      res.send(transactions);
     }
   };
 

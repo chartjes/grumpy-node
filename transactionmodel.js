@@ -53,10 +53,8 @@ function TransactionModel(pgClient) {
                 if(idx % 2 == 0) {
                     //if this is an even row, append the row to the reduced transactions
                     return prev.concat([cur]);
-                } else {
-                    //if this is an odd row, omit the result from the transactions
-                    return prev;
-                }
+                } 
+                return prev; 
             }, []);
 
             //error first

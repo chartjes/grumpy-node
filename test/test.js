@@ -12,7 +12,7 @@ describe('Transaction API', function() {
   
   it('GET /transactions/current should return expected results', function(done) {
     var fs = require('fs');
-    var currentData = fs.readFile('./current', 'utf8', function(err, data) { 
+    var currentData = fs.readFile('./test/fixtures/current', 'utf8', function(err, data) { 
       if (err) { throw err; }
       return data;
     });

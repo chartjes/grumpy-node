@@ -11,14 +11,18 @@ describe('Transaction API', function() {
   });
   
   it('GET /transactions/current should return expected results', function(done) {
+    var currentData = '';
     var fs = require('fs');
-    var currentData = fs.readFile('./test/fixtures/current', 'utf8', function(err, data) { 
-      if (err) { throw err; }
-      return data;
+    var stream = fs.createReadStream('./test/fixtures/current');
+
+    stream.on('data', function (data) {
+      currentData += data;
     });
-    request(app)
-      .get('/transactions/current')
-      .expect(currentData, done);
+    stream.on('end', function () {
+      request(app)
+        .get('/transactions/current')
+        .expect(currentData, done);
+    });
   });
 });
 
